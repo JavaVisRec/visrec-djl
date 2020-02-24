@@ -11,12 +11,12 @@ repositories {
 
 dependencies {
     implementation "javax.visrec:visrec-api:1.0-SNAPSHOT"
-    implementation "ai.djl:api:0.3.0-SNAPSHOT"
-    implementation "ai.djl:basicdataset:0.3.0-SNAPSHOT"
-    implementation "ai.djl:model-zoo:0.3.0-SNAPSHOT"
-    implementation "ai.djl.mxnet:mxnet-model-zoo:0.3.0-SNAPSHOT"
-    implementation 'ai.djl.mxnet:mxnet-engine:0.3.0-SNAPSHOT'
-    implementation 'ai.djl.mxnet:mxnet-native-mkl:1.6.0-c-SNAPSHOT'
+    implementation "ai.djl:api:0.3.0"
+    implementation "ai.djl:basicdataset:0.3.0"
+    implementation "ai.djl:model-zoo:0.3.0"
+    implementation "ai.djl.mxnet:mxnet-model-zoo:0.3.0"
+    implementation 'ai.djl.mxnet:mxnet-engine:0.3.0'
+    implementation 'ai.djl.mxnet:mxnet-native-mkl:1.6.0'
     implementation "org.apache.commons:commons-csv:1.7"
     implementation "org.slf4j:slf4j-simple:1.7.30"
 
