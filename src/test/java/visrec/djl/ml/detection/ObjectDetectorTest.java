@@ -38,6 +38,7 @@ public class ObjectDetectorTest {
                 Criteria.builder()
                         .setTypes(BufferedImage.class, DetectedObjects.class)
                         .optApplication(Application.CV.OBJECT_DETECTION)
+                        .optArgument("threshold", 0.01)
                         .build();
         try (ZooModel<BufferedImage, DetectedObjects> model = ModelZoo.loadModel(criteria)) {
             SimpleObjectDetector objectDetector = new SimpleObjectDetector(model);
@@ -47,8 +48,10 @@ public class ObjectDetectorTest {
                             "https://djl-ai.s3.amazonaws.com/resources/images/dog_bike_car.jpg");
             Map<String, List<BoundingBox>> result = objectDetector.detectObject(input);
 
-            for (String label : result.keySet()) {
-                System.out.println(label);
+            for (List<BoundingBox> boundingBoxes : result.values()) {
+                for (BoundingBox boundingBox : boundingBoxes) {
+                    System.out.println(boundingBox.toString());
+                }
             }
         }
     }
