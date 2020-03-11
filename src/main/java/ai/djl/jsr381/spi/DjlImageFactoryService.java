@@ -1,4 +1,4 @@
-package visrec.djl.spi;
+package ai.djl.jsr381.spi;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

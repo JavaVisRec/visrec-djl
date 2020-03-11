@@ -1,1 +1,1 @@
-visrec.djl.spi.DjlImageClassifierFactory
+ai.djl.jsr381.spi.DjlImageClassifierFactory

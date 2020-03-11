@@ -1,7 +1,8 @@
-package visrec.djl.spi;
+package ai.djl.jsr381.spi;
 
 import ai.djl.MalformedModelException;
 import ai.djl.basicmodelzoo.BasicModelZoo;
+import ai.djl.jsr381.classification.SimpleImageClassifier;
 import ai.djl.modality.Classifications;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
@@ -15,7 +16,6 @@ import javax.visrec.ml.classification.NeuralNetImageClassifier;
 import javax.visrec.spi.ImageClassifierFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import visrec.djl.ml.classification.SimpleImageClassifier;
 
 public class DjlImageClassifierFactory implements ImageClassifierFactory<BufferedImage> {
 

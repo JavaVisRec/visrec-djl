@@ -9,6 +9,9 @@ repositories {
     }
 }
 
+group "ai.djl.jsr381"
+version "0.3.0"
+
 dependencies {
     implementation "javax.visrec:visrec-api:1.0-SNAPSHOT"
     implementation "ai.djl:api:0.3.0"

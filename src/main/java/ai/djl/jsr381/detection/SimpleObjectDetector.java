@@ -1,4 +1,4 @@
-package visrec.djl.ml.detection;
+package ai.djl.jsr381.detection;
 
 import ai.djl.inference.Predictor;
 import ai.djl.modality.cv.DetectedObjects;

@@ -1,4 +1,4 @@
-package visrec.djl.spi;
+package ai.djl.jsr381.spi;
 
 import javax.visrec.spi.BuilderService;
 import javax.visrec.spi.ImageFactoryService;

@@ -1,4 +1,4 @@
-package visrec.djl.ml.dataset;
+package ai.djl.jsr381.dataset;
 
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;

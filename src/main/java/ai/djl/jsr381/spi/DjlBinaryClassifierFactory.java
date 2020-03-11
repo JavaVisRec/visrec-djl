@@ -1,6 +1,8 @@
-package visrec.djl.spi;
+package ai.djl.jsr381.spi;
 
 import ai.djl.Model;
+import ai.djl.jsr381.classification.SimpleBinaryClassifier;
+import ai.djl.jsr381.dataset.CsvDataset;
 import ai.djl.metric.Metrics;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
@@ -26,8 +28,6 @@ import javax.visrec.ml.ClassifierCreationException;
 import javax.visrec.ml.classification.BinaryClassifier;
 import javax.visrec.ml.classification.NeuralNetBinaryClassifier;
 import javax.visrec.spi.BinaryClassifierFactory;
-import visrec.djl.ml.classification.SimpleBinaryClassifier;
-import visrec.djl.ml.dataset.CsvDataset;
 
 public class DjlBinaryClassifierFactory implements BinaryClassifierFactory<float[]> {
 

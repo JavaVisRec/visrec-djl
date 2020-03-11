@@ -1,4 +1,4 @@
-package visrec.djl.ml.classification;
+package ai.djl.jsr381.classification;
 
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;

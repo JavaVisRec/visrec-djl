@@ -10,7 +10,7 @@
  * OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package visrec.djl.ml.classification;
+package ai.djl.jsr381.classification;
 
 import java.io.File;
 import java.net.URL;
