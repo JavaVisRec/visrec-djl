@@ -14,6 +14,7 @@ public final class DjlServiceProvider extends ServiceProvider {
 
     /** {@inheritDoc} */
     @Override
+    @SuppressWarnings("deprecation")
     public BuilderService getBuilderService() {
         return null;
     }
