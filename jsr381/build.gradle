@@ -1,0 +1,29 @@
+plugins {
+    id "java-library"
+}
+
+group "ai.djl.jsr381"
+version "0.3.0"
+
+dependencies {
+    api "javax.visrec:visrec-api:1.0-SNAPSHOT"
+    api "ai.djl:api:0.3.0"
+    api "ai.djl:basicdataset:0.3.0"
+    api "ai.djl:model-zoo:0.3.0"
+    api "ai.djl.mxnet:mxnet-model-zoo:0.3.0"
+    api 'ai.djl.mxnet:mxnet-engine:0.3.0'
+    api 'ai.djl.mxnet:mxnet-native-mkl:1.6.0'
+    api "org.apache.commons:commons-csv:1.7"
+    api "org.slf4j:slf4j-simple:1.7.30"
+
+    testImplementation("org.testng:testng:6.14.3") {
+        exclude group: "junit", module: "junit"
+    }
+}
+
+test {
+    // Use TestNG for unit tests
+    useTestNG()
+}
+
+apply from: file("${rootProject.projectDir}/tools/gradle/formatter.gradle")
