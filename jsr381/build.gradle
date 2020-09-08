@@ -6,15 +6,15 @@ plugins {
 
 group "ai.djl.jsr381"
 boolean isRelease = project.hasProperty("release") || project.hasProperty("staging")
-version = "0.4.2" + (isRelease ? "" : "-SNAPSHOT")
+version = "0.5.0" + (isRelease ? "" : "-SNAPSHOT")
 
 dependencies {
     api "javax.visrec:visrec-api:1.0.1"
-    api "ai.djl:api:0.4.1"
-    api "ai.djl:basicdataset:0.4.1"
-    api "ai.djl:model-zoo:0.4.1"
-    api "ai.djl.mxnet:mxnet-model-zoo:0.4.1"
-    api 'ai.djl.mxnet:mxnet-engine:0.4.1'
+    api "ai.djl:api:0.5.0"
+    api "ai.djl:basicdataset:0.5.0"
+    api "ai.djl:model-zoo:0.5.0"
+    api "ai.djl.mxnet:mxnet-model-zoo:0.5.0"
+    api 'ai.djl.mxnet:mxnet-engine:0.5.0'
     api 'ai.djl.mxnet:mxnet-native-auto:1.6.0'
     api "org.apache.commons:commons-csv:1.7"
 
