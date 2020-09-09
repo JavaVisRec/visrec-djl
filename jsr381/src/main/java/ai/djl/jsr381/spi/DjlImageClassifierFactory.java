@@ -4,11 +4,12 @@ import ai.djl.MalformedModelException;
 import ai.djl.Model;
 import ai.djl.jsr381.classification.SimpleImageClassifier;
 import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.Image.Flag;
 import ai.djl.modality.cv.transform.CenterCrop;
 import ai.djl.modality.cv.transform.Resize;
 import ai.djl.modality.cv.transform.ToTensor;
 import ai.djl.modality.cv.translator.ImageClassificationTranslator;
-import ai.djl.modality.cv.util.NDImageUtils.Flag;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.Pipeline;
 import ai.djl.translate.Translator;
@@ -47,18 +48,18 @@ public class DjlImageClassifierFactory implements ImageClassifierFactory<Buffere
             try {
                 Pipeline pipeline = new Pipeline();
                 pipeline.add(new CenterCrop()).add(new Resize(width, height)).add(new ToTensor());
-                Translator<BufferedImage, Classifications> translator =
+                Translator<Image, Classifications> translator =
                         ImageClassificationTranslator.builder()
                                 .optFlag(flag)
                                 .setPipeline(pipeline)
-                                .setSynsetArtifactName("synset.txt")
+                                .optSynsetArtifactName("synset.txt")
                                 .optApplySoftmax(true)
                                 .build();
 
-                Model model = Model.newInstance();
+                Model model =
+                        Model.newInstance("imageClassifier"); // TODO generate better model name
                 model.load(modelPath);
-                ZooModel<BufferedImage, Classifications> zooModel =
-                        new ZooModel<>(model, translator);
+                ZooModel<Image, Classifications> zooModel = new ZooModel<>(model, translator);
                 return new SimpleImageClassifier(zooModel, 5);
             } catch (MalformedModelException | IOException e) {
                 throw new ClassifierCreationException("Failed load model from model zoo.", e);

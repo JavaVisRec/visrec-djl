@@ -28,7 +28,7 @@ public class ImageClassifierTest {
 
     @Test
     public void testImageClassifier() throws ClassifierCreationException, ClassificationException {
-        URL url = BinaryClassifierTest.class.getResource("/0.png");
+        URL url = ImageClassifierTest.class.getResource("/0.png");
         File input = new File(url.getFile());
 
         Path modelDir = Paths.get("src/test/resources/mlp");

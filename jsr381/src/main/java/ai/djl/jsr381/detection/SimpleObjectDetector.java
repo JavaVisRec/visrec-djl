@@ -1,6 +1,8 @@
 package ai.djl.jsr381.detection;
 
 import ai.djl.inference.Predictor;
+import ai.djl.modality.cv.BufferedImageFactory;
+import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
 import ai.djl.modality.cv.output.Rectangle;
 import ai.djl.repository.zoo.ZooModel;
@@ -17,17 +19,18 @@ import javax.visrec.util.BoundingBox;
 /** A simple object detector implemented with DJL. */
 public class SimpleObjectDetector implements ObjectDetector<BufferedImage> {
 
-    private ZooModel<BufferedImage, DetectedObjects> model;
+    private final ZooModel<Image, DetectedObjects> model;
 
-    public SimpleObjectDetector(ZooModel<BufferedImage, DetectedObjects> model) {
+    public SimpleObjectDetector(ZooModel<Image, DetectedObjects> model) {
         this.model = model;
     }
 
     @Override
     public Map<String, List<BoundingBox>> detectObject(BufferedImage image)
             throws ClassificationException {
-        try (Predictor<BufferedImage, DetectedObjects> predictor = model.newPredictor()) {
-            DetectedObjects detectedObjects = predictor.predict(image);
+        try (Predictor<Image, DetectedObjects> predictor = model.newPredictor()) {
+            DetectedObjects detectedObjects =
+                    predictor.predict(BufferedImageFactory.getInstance().fromImage(image));
             Map<String, List<BoundingBox>> ret = new ConcurrentHashMap<>();
 
             int imageWidth = image.getWidth();

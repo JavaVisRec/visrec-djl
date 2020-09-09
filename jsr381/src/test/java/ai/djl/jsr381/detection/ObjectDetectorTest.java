@@ -14,16 +14,18 @@ package ai.djl.jsr381.detection;
 
 import ai.djl.Application;
 import ai.djl.MalformedModelException;
+import ai.djl.modality.cv.Image;
 import ai.djl.modality.cv.output.DetectedObjects;
-import ai.djl.modality.cv.util.BufferedImageUtils;
 import ai.djl.repository.zoo.Criteria;
 import ai.djl.repository.zoo.ModelNotFoundException;
 import ai.djl.repository.zoo.ModelZoo;
 import ai.djl.repository.zoo.ZooModel;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.visrec.ml.ClassificationException;
 import javax.visrec.util.BoundingBox;
 import org.testng.annotations.Test;
@@ -34,19 +36,20 @@ public class ObjectDetectorTest {
     public void testObjectDetection()
             throws ClassificationException, IOException, ModelNotFoundException,
                     MalformedModelException {
-        Criteria<BufferedImage, DetectedObjects> criteria =
+        Criteria<Image, DetectedObjects> criteria =
                 Criteria.builder()
-                        .setTypes(BufferedImage.class, DetectedObjects.class)
+                        .setTypes(Image.class, DetectedObjects.class)
                         .optApplication(Application.CV.OBJECT_DETECTION)
-                        .optArgument("threshold", 0.01)
+                        .optArtifactId("yolo")
+                        .optArgument("threshold", 0.3)
                         .build();
-        try (ZooModel<BufferedImage, DetectedObjects> model = ModelZoo.loadModel(criteria)) {
+        try (ZooModel<Image, DetectedObjects> model = ModelZoo.loadModel(criteria)) {
             SimpleObjectDetector objectDetector = new SimpleObjectDetector(model);
 
-            BufferedImage input =
-                    BufferedImageUtils.fromUrl(
-                            "https://djl-ai.s3.amazonaws.com/resources/images/dog_bike_car.jpg");
-            Map<String, List<BoundingBox>> result = objectDetector.detectObject(input);
+            URL imageUrl =
+                    new URL("https://djl-ai.s3.amazonaws.com/resources/images/dog_bike_car.jpg");
+            BufferedImage inputImage = ImageIO.read(imageUrl);
+            Map<String, List<BoundingBox>> result = objectDetector.detectObject(inputImage);
 
             for (List<BoundingBox> boundingBoxes : result.values()) {
                 for (BoundingBox boundingBox : boundingBoxes) {

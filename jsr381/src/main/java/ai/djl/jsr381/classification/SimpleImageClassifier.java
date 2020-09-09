@@ -2,6 +2,8 @@ package ai.djl.jsr381.classification;
 
 import ai.djl.inference.Predictor;
 import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.BufferedImageFactory;
+import ai.djl.modality.cv.Image;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.translate.TranslateException;
 import java.awt.image.BufferedImage;
@@ -22,10 +24,10 @@ import javax.visrec.ml.classification.ImageClassifier;
  */
 public class SimpleImageClassifier implements ImageClassifier<BufferedImage> {
 
-    private ZooModel<BufferedImage, Classifications> model;
-    private int topK;
+    private final ZooModel<Image, Classifications> model;
+    private final int topK;
 
-    public SimpleImageClassifier(ZooModel<BufferedImage, Classifications> model, int topK) {
+    public SimpleImageClassifier(ZooModel<Image, Classifications> model, int topK) {
         this.model = model;
         this.topK = topK;
     }
@@ -50,8 +52,9 @@ public class SimpleImageClassifier implements ImageClassifier<BufferedImage> {
 
     @Override
     public Map<String, Float> classify(BufferedImage input) throws ClassificationException {
-        try (Predictor<BufferedImage, Classifications> predictor = model.newPredictor()) {
-            Classifications classifications = predictor.predict(input);
+        try (Predictor<Image, Classifications> predictor = model.newPredictor()) {
+            Classifications classifications =
+                    predictor.predict(BufferedImageFactory.getInstance().fromImage(input));
             List<Classifications.Classification> list = classifications.topK(topK);
             return list.stream()
                     .collect(

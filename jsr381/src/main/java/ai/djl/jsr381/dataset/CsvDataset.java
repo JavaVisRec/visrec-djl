@@ -5,6 +5,7 @@ import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
+import ai.djl.util.Progress;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -44,6 +45,9 @@ public class CsvDataset extends RandomAccessDataset {
     public long availableSize() {
         return records.size();
     }
+
+    @Override
+    public void prepare(Progress progress) {}
 
     public static final class Builder extends BaseBuilder<Builder> {
 

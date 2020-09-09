@@ -15,12 +15,15 @@ import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.BatchNorm;
 import ai.djl.repository.zoo.ZooModel;
 import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.dataset.Batch;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.evaluator.BinaryAccuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
+import ai.djl.translate.Batchifier;
+import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
 import java.io.IOException;
@@ -46,13 +49,13 @@ public class DjlBinaryClassifierFactory implements BinaryClassifierFactory<float
 
         SequentialBlock mlp = new SequentialBlock().add(Blocks.batchFlattenBlock(inputSize));
         for (int size : hiddenLayers) {
-            mlp.add(Linear.builder().setOutChannels(size).build()).add(Activation::relu);
+            mlp.add(Linear.builder().setUnits(size).build()).add(Activation::relu);
         }
         mlp.add(BatchNorm.builder().build())
-                .add(Linear.builder().setOutChannels(1).build())
+                .add(Linear.builder().setUnits(1).build())
                 .add(arrays -> new NDList(arrays.singletonOrThrow().flatten()));
 
-        Model model = Model.newInstance();
+        Model model = Model.newInstance("binaryClassifier"); // TODO generate better model name
         model.setBlock(mlp);
 
         RandomAccessDataset[] dataset;
@@ -63,7 +66,7 @@ public class DjlBinaryClassifierFactory implements BinaryClassifierFactory<float
                             .setSampling(batchSize, true)
                             .build();
             dataset = csv.randomSplit(8, 2);
-        } catch (IOException e) {
+        } catch (IOException | TranslateException e) {
             throw new ClassifierCreationException("Failed to load dataset.", e);
         }
 
@@ -80,19 +83,21 @@ public class DjlBinaryClassifierFactory implements BinaryClassifierFactory<float
 
             for (int i = 0; i < epochs; i++) {
                 for (Batch batch : trainer.iterateDataset(dataset[0])) {
-                    trainer.trainBatch(batch);
+                    EasyTrain.trainBatch(trainer, batch);
                     trainer.step();
                     batch.close();
                 }
 
                 for (Batch batch : trainer.iterateDataset(dataset[1])) {
-                    trainer.validateBatch(batch);
+                    EasyTrain.validateBatch(trainer, batch);
                     batch.close();
                 }
 
                 // reset training and validation evaluators at end of epoch
-                trainer.endEpoch();
+                trainer.notifyListeners(listener -> listener.onEpoch(trainer));
             }
+        } catch (IOException | TranslateException e) {
+            throw new ClassifierCreationException("Failed to process dataset.", e);
         }
 
         return new SimpleBinaryClassifier(new ZooModel<>(model, new BinaryClassifierTranslator()));
@@ -110,6 +115,11 @@ public class DjlBinaryClassifierFactory implements BinaryClassifierFactory<float
         @Override
         public Float processOutput(TranslatorContext ctx, NDList list) {
             return list.singletonOrThrow().getFloat();
+        }
+
+        @Override
+        public Batchifier getBatchifier() {
+            return Batchifier.STACK;
         }
     }
 }
