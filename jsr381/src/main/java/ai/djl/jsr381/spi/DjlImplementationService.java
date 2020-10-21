@@ -18,6 +18,6 @@ public class DjlImplementationService extends ImplementationService {
     /** {@inheritDoc} */
     @Override
     public String getVersion() {
-        return "0.3.0";
+        return "0.8.0";
     }
 }
