@@ -22,38 +22,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import javax.visrec.ml.ClassificationException;
 import javax.visrec.ml.ClassifierCreationException;
 import javax.visrec.ml.classification.ImageClassifier;
 import javax.visrec.ml.classification.NeuralNetImageClassifier;
-import org.testng.annotations.Test;
 
-public class ImageClassifierTest {
+public class CatDogRecognition {
 
-    @Test
-    public void testImageClassifier() throws ClassifierCreationException, ClassificationException {
-        URL url = ImageClassifierTest.class.getResource("/0.png");
-        File input = new File(url.getFile());
-
-        Path modelDir = Paths.get("src/test/resources/mlp");
-
-        ImageClassifier<BufferedImage> classifier =
-                NeuralNetImageClassifier.builder()
-                        .inputClass(BufferedImage.class)
-                        .imageHeight(28)
-                        .imageWidth(28)
-                        .importModel(modelDir)
-                        .build();
-
-        Map<String, Float> result = classifier.classify(input);
-        for (Map.Entry<String, Float> entry : result.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-    }
-
-    @Test
-    public void testImageClassifierTraining()
-            throws ClassifierCreationException, ClassificationException, IOException {
+    public static void main(String[] args) throws IOException, ClassifierCreationException {
         File trainingFile = downloadTrainingData();
         Path modelDir = Paths.get("build/model");
 
@@ -64,7 +39,7 @@ public class ImageClassifierTest {
                         .imageWidth(128)
                         .trainingFile(trainingFile)
                         .exportModel(modelDir)
-                        .maxEpochs(2)
+                        .maxEpochs(20)
                         .build();
 
         File input = new File(trainingFile, "cat/cat_1.png");
@@ -74,7 +49,7 @@ public class ImageClassifierTest {
         }
     }
 
-    private File downloadTrainingData() throws IOException {
+    private static File downloadTrainingData() throws IOException {
         String link =
                 "https://github.com/JavaVisRec/jsr381-examples-datasets/raw/master/cats_and_dogs_training_data_png.zip";
         URL url = new URL(link);
